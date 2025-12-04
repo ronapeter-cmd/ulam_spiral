@@ -1,3 +1,5 @@
+import numpy as np
+
 def set_if_inside (matrix: np.ndarray, x: int, y: int, value: int):
     """
     Set `matrix[x, y] = value` if (x, y) is inside the array bounds.
