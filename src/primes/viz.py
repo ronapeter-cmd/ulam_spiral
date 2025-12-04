@@ -69,6 +69,61 @@ def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = N
 
     return matrix
 
+def show_with_diagonals(matrix: np.ndarray, diagonal_mask:np.ndarray, output: Output | None = None, figsize_scale:float=60.0 ) -> None:
+    """
+    Display an Ulam spiral with diagonal segments highlighted.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        Ulam matrix filled by fill_primes().
+        Values:
+            0 = non-prime
+            1 = prime
+    diagonal_mask : np.ndarray
+        Same shape as matrix. 1s mark detected diagonal segments.
+    figsize_scale : float
+        Controls figure size. Larger values = bigger plot.
+
+    Notes
+    -----
+    - Blue points = primes
+    - Red points  = diagonal segments detected by detect_diagonal_segments()
+    """
+    prime_y, prime_x = np.where(matrix == 1)
+    diag_y, diag_x = np.where(diagonal_mask == 1)
+
+    
+    def _plot() -> None:
+        clear_output(wait=True)
+        plt.close("all")
+
+        # Scale figure size relative to matrix size (simple heuristic)
+        fig_size = max(4, size // figsize_scale)
+        plt.figure(figsize=(fig_size, fig_size))
+
+        # Prime points in blue
+        plt.scatter(prime_x, prime_y, c="blue", s=1, label="primes")
+
+        # Diagonal points in red
+        plt.scatter(diag_x, diag_y, c="red", s=1, label="diagonals")
+
+        plt.xlim(0, size)
+        plt.ylim(0, size)
+        plt.axis("on")
+        plt.grid(False)
+        plt.tight_layout()
+        plt.show()
+
+    if output is not None:
+        with output:
+            _plot()
+    else:
+        _plot()
+    
+    
+
+
 """
 Interactive prime (Ulam) spiral explorer with animation.
 
