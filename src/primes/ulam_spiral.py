@@ -1,3 +1,28 @@
+def set_if_inside (matrix: np.ndarray, x: int, y: int, value: int):
+    """
+    Set `matrix[x, y] = value` if (x, y) is inside the array bounds.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        2D grid to modify.
+    x, y : int
+        Index coordinates.
+    value : int
+        Value to assign.
+
+    Returns
+    -------
+    bool
+        True if the position was inside and updated, False otherwise.
+    """
+    
+    rows, cols = matrix.shape
+    if 0 <= x < rows and  0 <= y < cols:
+        matrix[x, y] = value
+        return True
+    return False
+    
 def fill_primes(matrix,offset):
     """
     Fill a 2D numpy array with an Ulam-style prime spiral.
