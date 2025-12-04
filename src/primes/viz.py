@@ -208,7 +208,13 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
         description="Animate",
         tooltip="Display spiral with varying offsets",
     )
+    
+    button_diagonals = widgets.Button(
+        description="Display diagonals",
+        button_style="info", 
+    )
 
+    
 
     # --- Callback: generate / update prime spiral ---
     def on_display_clicked(_button: widgets.Button) -> None:
@@ -240,14 +246,29 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
                 matrix = display_primes(matrix,offset_text.value+j*2+1, output)
         except ValueError:
             print("Error " )
+  
+    def on_diagonals_clicked(_button: widgets.Button) -> None:
+        nonlocal matrix
+        try:
+            limit = limit_text.value
+            matrix = create_zero_matrix(limit, padding=10)
+            size = matrix.shape[0]            
+            matrix = display_primes(matrix,offset_text.value+j*2+1, output)
+            mask = detect_diagonal_segments(matrix,gap_tolerance = 5, min_run = 5)
+            show_with_diagonals(matrix, mask, output, 60)
+        except ValueError:
+            print("Error " )
 
+
+    
     # Bind the function to the button's click event
     button_display.on_click(on_display_clicked)
     button_animate.on_click(on_animate_clicked)
+    button_diagonals.on_click(on_diagonals_clicked)
 
 
     # --- Show UI ---
-    row1 = widgets.HBox([limit_text, offset_text, button_display])
+    row1 = widgets.HBox([limit_text, offset_text, button_display, button_diagonals])
     row2 = widgets.HBox([animate_text, button_animate])
     display(widgets.VBox([row1, row2, output]))
 
