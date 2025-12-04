@@ -1,3 +1,11 @@
+from __future__ import annotations
+import ipywidgets as widgets
+from IPython.display import display, clear_output
+from ipywidgets import Output
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = None, ) -> np.ndarray:
     """
     Fill and display an Ulam prime spiral.
@@ -70,14 +78,6 @@ Requires:
 
 Both are assumed to be defined elsewhere in your notebook/module.
 """
-
-from __future__ import annotations
-import ipywidgets as widgets
-from IPython.display import display, clear_output
-from ipywidgets import Output
-import numpy as np
-import matplotlib.pyplot as plt
-
 
 INITIAL_LIMIT = 100_000
 INITIAL_OFFSET = 1
