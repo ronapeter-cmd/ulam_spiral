@@ -94,6 +94,7 @@ def show_with_diagonals(matrix: np.ndarray, diagonal_mask:np.ndarray, output: Ou
     """
     prime_y, prime_x = np.where(matrix == 1)
     diag_y, diag_x = np.where(diagonal_mask == 1)
+    size = matrix.shape[0]
 
     
     def _plot() -> None:
