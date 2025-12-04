@@ -48,7 +48,7 @@ def find_runs_1d(array: np.ndarray, gap_tolerance: int = 1):
     else:
       smoothed = array
     # Identify transitions: 0 -> 1 (run start), 1 -> 0 (run end)
-    padded = np.r_(0, smoothed, 0)
+    padded = np.r_[0, smoothed, 0]
     diff = np.diff(padded)
     starts = np.where(diff == 1)[0]
     ends = np.where(diff == -1)[0]
