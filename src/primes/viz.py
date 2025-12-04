@@ -5,6 +5,7 @@ from ipywidgets import Output
 import numpy as np
 import matplotlib.pyplot as plt
 from .ulam_spiral import fill_primes
+from .goodness import detect_diagonal_segments, ulam_goodness
 
 
 def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = None, ) -> np.ndarray:
@@ -254,8 +255,8 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
             limit = limit_text.value
             matrix = create_zero_matrix(limit, padding=10)
             size = matrix.shape[0]            
-            matrix = display_primes(matrix,offset_text.value+j*2+1, output)
-            mask = detect_diagonal_segments(matrix,gap_tolerance = 5, min_run = 5)
+            matrix = display_primes(matrix,offset_text.value, output)
+            mask = detect_diagonal_segments(matrix,gap_tolerance = 20, min_run = 5)
             show_with_diagonals(matrix, mask, output, 60)
         except ValueError:
             print("Error " )
