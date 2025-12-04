@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: primes
+Version: 0.1.0
+Summary: Prime number exploration tools, Ulam spiral generator, visualization and diagonal goodness metrics.
+Author-email: Peter Rona <rona.peter@gmail.com>
+License: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: ipywidgets
+
+# primes
+Visualizing prime numbers
