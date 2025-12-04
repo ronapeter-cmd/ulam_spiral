@@ -60,3 +60,140 @@ def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = N
         _plot()
 
     return matrix
+
+"""
+Interactive prime (Ulam) spiral explorer with animation.
+
+Requires:
+- display_primes(matrix, size, offset)
+- fourier_lowpass(matrix, radius)
+
+Both are assumed to be defined elsewhere in your notebook/module.
+"""
+
+from __future__ import annotations
+import ipywidgets as widgets
+from IPython.display import display, clear_output
+from ipywidgets import Output
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+INITIAL_LIMIT = 100_000
+INITIAL_OFFSET = 1
+INITIAL_ANIMATE = 10
+PADDING = 10
+
+
+output = widgets.Output()
+
+def create_zero_matrix (limit: int, padding: int) -> np.ndarray:
+    """
+    Create a square zero matrix large enough to hold numbers up to `limit`
+    arranged approximately in a sqrt(limit) x sqrt(limit) grid.
+
+    Parameters
+    ----------
+    limit : int
+        Maximum number you want to place in the spiral.
+    padding : int
+        Extra pixels added to each dimension.
+
+    Returns
+    -------
+    np.ndarray
+        2D zero-initialized matrix.
+    """
+    size = int(round(limit ** 0.5))
+    return np.zeros((size+padding,size+padding))
+
+
+def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int=INITIAL_OFFSET, initial_animate:int=INITIAL_ANIMATE) -> None:
+
+    """
+    Build and display an interactive UI for exploring a prime spiral:
+    - set limit (how many numbers to check),
+    - set offset (starting number),
+    - display the prime spiral,
+    - run a simple "animation" with changing offsets.
+    """
+
+    # Shared state for callbacks
+    matrix: np.ndarray | None = None  # will be created on demand
+
+    # --- Widgets ---
+    limit_text = widgets.IntText(
+        value=initial_limit,
+        description='Limit:',
+        placeholder='Enter a number',
+    )
+
+    offset_text = widgets.IntText(
+        value=initial_offset,
+        description='Offset:',
+        placeholder='Enter a number',
+    )
+
+    
+    animate_text = widgets.IntText(
+        value=initial_animate,
+        description='Animation length:',
+        placeholder='Enter a number',
+    )
+
+
+    button_display = widgets.Button(
+        description="Display primes",
+        button_style="info", 
+        tooltip='Use the number in the text box',
+    )
+
+
+    button_animate = widgets.Button(
+        description="Animate",
+        tooltip="Display spiral with varying offsets",
+    )
+
+
+    # --- Callback: generate / update prime spiral ---
+    def on_display_clicked(_button: widgets.Button) -> None:
+        nonlocal matrix
+        try:
+            limit = limit_text.value
+            if limit <=0:
+                raise ValueError("Limit must be positive")
+            matrix = create_zero_matrix(limit, padding=10)
+            size = matrix.shape[0] 
+            matrix = display_primes(matrix, offset_text.value, output)
+       
+        except Exception as exc:
+            with output:
+                clear_output(wait=True)
+                print(f"Error while updating primes:  {exc}")
+
+
+    def on_animate_clicked(_button: widgets.Button) -> None:
+        nonlocal matrix
+        try:
+            limit = limit_text.value
+            animate = animate_text.value
+            matrix = create_zero_matrix(limit, padding=10)
+            # Display the map with a changing starting point - as an animation
+            size = matrix.shape[0]            
+            for j in range(animate):
+                matrix = create_zero_matrix(limit, padding=10)
+                matrix = display_primes(matrix,offset_text.value+j*2+1, output)
+        except ValueError:
+            print("Error " )
+
+    # Bind the function to the button's click event
+    button_display.on_click(on_display_clicked)
+    button_animate.on_click(on_animate_clicked)
+
+
+    # --- Show UI ---
+    row1 = widgets.HBox([limit_text, offset_text, button_display])
+    row2 = widgets.HBox([animate_text, button_animate])
+    display(widgets.VBox([row1, row2, output]))
+
+
