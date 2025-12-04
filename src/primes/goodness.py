@@ -35,10 +35,10 @@ def find_runs_1d(array: np.ndarray, gap_tolerance: int = 1):
     """
     # Ensure binary
     array = (array > 0).astype(int)
-   
+    
     if array.size == 0:
         return []
-
+    
     # Expand small gaps:
     # convolution with a ones-kernel marks any window that contains at least one 1
     if gap_tolerance > 0:
@@ -52,7 +52,7 @@ def find_runs_1d(array: np.ndarray, gap_tolerance: int = 1):
     diff = np.diff(padded)
     starts = np.where(diff == 1)[0]
     ends = np.where(diff == -1)[0]
-  return list(zip(starts,ends))
+    return list(zip(starts,ends))
 
 # ============================================================
 # 2. Diagonal segment detector (↘ and ↙ directions)
