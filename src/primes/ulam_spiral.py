@@ -1,4 +1,5 @@
 import numpy as np
+from .primes import is_prime
 
 def set_if_inside (matrix: np.ndarray, x: int, y: int, value: int):
     """
