@@ -80,7 +80,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
     """
 
   rows, cols = matrix.shape
-  mask = np.zeros_like(matrix)
+  mask = np.zeros_like(matrix, dtype=bool)
   # -----------------------------
   # Scan main-diagonal direction ↘
   # (diagonals defined by i - j = constant)
@@ -104,7 +104,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
   # Use horizontal flip to reuse diagonal logic
   # -----------------------------
   flipped_matrix = np.fliplr(matrix)
-  flipped_mask = np.zeros_like(matrix)
+  flipped_mask = np.zeros_like(matrix, dtype=bool)
 
   for k in range (-rows +1, cols):
     diag = np.diag(flipped_matrix, k=k)
