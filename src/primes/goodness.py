@@ -90,15 +90,14 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
     runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
 
     for start, end in runs:
-      if end - start < min_run:
-        continue
-        
-    # Map diag indexes back to matrix coordinates
-    for idx in range (start, end):
-      i= idx
-      j=idx-k
-      if 0 <= i < rows and 0 <= j < cols:
-        mask[i,j] = 1
+        if end - start < min_run:
+            continue
+        # Map diag indexes back to matrix coordinates
+        for idx in range (start, end):
+            i= idx
+            j=idx-k
+            if 0 <= i < rows and 0 <= j < cols:
+                mask[i,j] = 1
 
   # -----------------------------
   # Scan anti-diagonal direction ↙
@@ -112,18 +111,17 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
     runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
 
     for start, end in runs:
-      if end - start < min_run:
-        continue
-        
-    # Map diag indexes back to matrix coordinates
-    for idx in range (start, end):
-      i= idx
-      j=idx-k
-      if 0 <= i < rows and 0 <= j < cols:
-        flipped_mask[i,j] = 1
+        if end - start < min_run:
+            continue
+        # Map diag indexes back to matrix coordinates
+        for idx in range (start, end):
+            i= idx
+            j=idx-k
+            if 0 <= i < rows and 0 <= j < cols:
+                flipped_mask[i,j] = 1
 
-  # Flip back and combine both direction masks
-  mask |= np.fliplr(flipped_mask)
+    # Flip back and combine both direction masks
+    mask |= np.fliplr(flipped_mask)
 
   return mask
 
