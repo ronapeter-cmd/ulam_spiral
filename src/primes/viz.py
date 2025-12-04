@@ -4,6 +4,7 @@ from IPython.display import display, clear_output
 from ipywidgets import Output
 import numpy as np
 import matplotlib.pyplot as plt
+from primes.ulam_spiral import fill_primes
 
 
 def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = None, ) -> np.ndarray:
