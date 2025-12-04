@@ -43,7 +43,7 @@ def find_runs_1d(array: np.ndarray, gap_tolerance: int = 1):
     # convolution with a ones-kernel marks any window that contains at least one 1
     if gap_tolerance > 0:
       kernel = np.ones (gap_tolerance + 1, dtype=int)
-      conv = np.convolce (array, kernel, mode="same")
+      conv = np.convolve (array, kernel, mode="same")
       smoothed = (conv > 0).astype(int)
     else:
       smoothed = array
