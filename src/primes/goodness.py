@@ -94,8 +94,12 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
             continue
         # Map diag indexes back to matrix coordinates
         for idx in range (start, end):
-            i= idx
-            j=idx-k
+            if k >= 0:
+                i = idx
+                j = idx + k
+              else:  # k < 0
+                i = idx - k
+                j = idx
             if 0 <= i < rows and 0 <= j < cols:
                 mask[i,j] = 1
 
@@ -115,8 +119,12 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
               continue
             # Map diag indexes back to matrix coordinates
           for idx in range (start, end):
-              i= idx
-              j=idx-k
+              if k >= 0:
+                i = idx
+                j = idx + k
+              else:  # k < 0
+                i = idx - k
+                j = idx
               if 0 <= i < rows and 0 <= j < cols:
                   flipped_mask[i,j] = 1
   # Flip back and combine both direction masks
