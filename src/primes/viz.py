@@ -229,7 +229,7 @@ def build_ulam_spiral_ui () -> None:
     )
     
     toggle_diagonals = widgets.ToggleButton(
-        value = False
+        value = False,
         description="Display diagonals",
         button_style="info", 
     )
