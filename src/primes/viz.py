@@ -8,13 +8,12 @@ from .ulam_spiral import fill_primes
 from .goodness import detect_diagonal_segments, ulam_goodness
 
 
-def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = None, ) -> np.ndarray:
+def display_primes(matrix: np.ndarray, output: Output | None = None, ) -> np.ndarray:
     """
     Fill and display an Ulam prime spiral.
 
     The function:
-    1. Fills `matrix` with prime indicators using `fill_primes`.
-    2. Plots the result with matplotlib, marking:
+    1. Plots the filled matrix result with matplotlib, marking:
        - the center (value == 2) in red,
        - prime positions (value == 1) in blue.
 
@@ -22,8 +21,6 @@ def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = N
     ----------
     matrix : np.ndarray
         2D square array to fill and visualize.
-    offset : int, optional
-        Starting integer for the spiral (default is 1).
     output : ipywidgets.Output, optional
         Jupyter output widget for displaying/refreshing the plot.
         If None, plotting is done directly.
@@ -33,8 +30,6 @@ def display_primes(matrix: np.ndarray, offset:int = 1, output: Output | None = N
     np.ndarray
         The filled matrix.
     """
-    
-    matrix = fill_primes(matrix, offset=offset)
 
     # Extract coordinates of primes and center
     ys, xs = np.where(matrix == 1)
@@ -233,7 +228,8 @@ def build_ulam_spiral_ui () -> None:
         tooltip="Display spiral with varying offsets",
     )
     
-    button_diagonals = widgets.Button(
+    toggle_diagonals = widgets.ToggleButton(
+        value = False
         description="Display diagonals",
         button_style="info", 
     )
@@ -245,11 +241,13 @@ def build_ulam_spiral_ui () -> None:
         nonlocal matrix
         try:
             limit = limit_text.value
+            offset = offset_text.value
             if limit <=0:
                 raise ValueError("Limit must be positive")
             matrix = create_zero_matrix(limit, padding=10)
             size = matrix.shape[0] 
-            matrix = display_primes(matrix, offset_text.value, output)
+            matrix = fill_primes(matrix, offset=offset)
+            matrix = display_primes(matrix, output= output)
        
         except Exception as exc:
             with output:
@@ -262,40 +260,45 @@ def build_ulam_spiral_ui () -> None:
         try:
             limit = limit_text.value
             animate = animate_text.value
+            offset = offset_text.value
             matrix = create_zero_matrix(limit, padding=10)
             # Display the map with a changing starting point - as an animation
             size = matrix.shape[0]            
             for j in range(animate):
                 matrix = create_zero_matrix(limit, padding=10)
-                matrix = display_primes(matrix,offset_text.value+j*2+1, output)
+                matrix = fill_primes(matrix, offset=offset+j*2+1)
+                matrix = display_primes(matrix, output=output)
         except ValueError:
             print("Error " )
   
-    def on_diagonals_clicked(_button: widgets.Button) -> None:
+    def on_diagonals_clicked(_toggle: widgets.ToggleButton, change) -> None:
         nonlocal matrix
-        try:
-            limit = limit_text.value
-            matrix = create_zero_matrix(limit, padding=10)
-            size = matrix.shape[0]  
-            gap_tolerance = gap_tolerance_text.value
-            min_run = min_run_text.value
-            matrix = display_primes(matrix,offset_text.value, output)
-            mask = detect_diagonal_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
-            show_with_diagonals(matrix, mask, output, 60)
-        except ValueError:
-            print("Error " )
+        if change["new] = True:
+            try:
+                limit = limit_text.value
+                gap_tolerance = gap_tolerance_text.value
+                min_run = min_run_text.value
+                # matrix = display_primes(matrix,offset_text.value, output)
+                mask = detect_diagonal_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
+                show_with_diagonals(matrix, mask, output, 60)
+            except ValueError:
+                print("Error " )
+        else:
+            matrix = display_primes(matrix, output=output)
+            
 
 
     
     # Bind the function to the button's click event
     button_display.on_click(on_display_clicked)
     button_animate.on_click(on_animate_clicked)
-    button_diagonals.on_click(on_diagonals_clicked)
+    toggle_diagonals.observe(on_diagonals_clicked, names="value")
+    
 
 
     # --- Show UI ---
     row1 = widgets.HBox([limit_text, offset_text, button_display])
-    row2 = widgets.HBox([gap_tolerance_text, min_run_text, button_diagonalt])
+    row2 = widgets.HBox([gap_tolerance_text, min_run_text, button_diagonal])
     row3 = widgets.HBox([animate_text, button_animate])
     display(widgets.VBox([row1, row2, output]))
 
