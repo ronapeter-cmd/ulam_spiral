@@ -273,7 +273,7 @@ def build_ulam_spiral_ui () -> None:
   
     def on_diagonals_clicked(_toggle: widgets.ToggleButton, change) -> None:
         nonlocal matrix
-        if change["new"] == True:
+        if change["new"] is True:
             try:
                 limit = limit_text.value
                 gap_tolerance = gap_tolerance_text.value
@@ -300,6 +300,6 @@ def build_ulam_spiral_ui () -> None:
     row1 = widgets.HBox([limit_text, offset_text, button_display])
     row2 = widgets.HBox([gap_tolerance_text, min_run_text, toggle_diagonals])
     row3 = widgets.HBox([animate_text, button_animate])
-    display(widgets.VBox([row1, row2, output]))
+    display(widgets.VBox([row1, row2, row3, output]))
 
 
