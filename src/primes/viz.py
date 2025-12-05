@@ -140,6 +140,8 @@ Both are assumed to be defined elsewhere in your notebook/module.
 INITIAL_LIMIT = 100_000
 INITIAL_OFFSET = 1
 INITIAL_ANIMATE = 10
+INITIAL_GAP_TOLERANCE = 5
+INITIAL_MIN_RUN = 50
 PADDING = 10
 
 
@@ -192,6 +194,20 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
         placeholder='Enter a number',
     )
 
+    gap_tolerance_text = widgets.IntText(
+        value=initial_gap_tolerance,
+        description='Gap tolerance:',
+        placeholder='Enter a number',
+    )
+
+    min_run_text = widgets.IntText(
+        value=initial_min_run,
+        description='Minimum run length:',
+        placeholder='Enter a number',
+    )
+
+    
+    
     
     animate_text = widgets.IntText(
         value=initial_animate,
@@ -255,9 +271,11 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
         try:
             limit = limit_text.value
             matrix = create_zero_matrix(limit, padding=10)
-            size = matrix.shape[0]            
+            size = matrix.shape[0]  
+            gap_tolerance = gap_tolerance_text.value
+            min_run = min_run_text.value
             matrix = display_primes(matrix,offset_text.value, output)
-            mask = detect_diagonal_segments(matrix,gap_tolerance = 20, min_run = 5)
+            mask = detect_diagonal_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
             show_with_diagonals(matrix, mask, output, 60)
         except ValueError:
             print("Error " )
