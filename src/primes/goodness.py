@@ -164,7 +164,7 @@ def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> f
   size = matrix.shape[0]
 
   # Normalize by total pixel count
-  score = total_marked / size*size
+  score = total_marked / (size*size)
 
   return float(score)
 
