@@ -298,7 +298,7 @@ def build_ulam_spiral_ui () -> None:
 
     # --- Show UI ---
     row1 = widgets.HBox([limit_text, offset_text, button_display])
-    row2 = widgets.HBox([gap_tolerance_text, min_run_text, button_diagonal])
+    row2 = widgets.HBox([gap_tolerance_text, min_run_text, toggle_diagonal])
     row3 = widgets.HBox([animate_text, button_animate])
     display(widgets.VBox([row1, row2, output]))
 
