@@ -97,7 +97,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
             if k >= 0:
                 i = idx
                 j = idx + k
-              else:  # k < 0
+            else:  # k < 0
                 i = idx - k
                 j = idx
             if 0 <= i < rows and 0 <= j < cols:
