@@ -168,7 +168,7 @@ def create_zero_matrix (limit: int, padding: int) -> np.ndarray:
     return np.zeros((size+padding,size+padding))
 
 
-def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int=INITIAL_OFFSET, initial_animate:int=INITIAL_ANIMATE) -> None:
+def build_ulam_spiral_ui () -> None:
 
     """
     Build and display an interactive UI for exploring a prime spiral:
@@ -177,7 +177,12 @@ def build_ulam_spiral_ui (initial_limit:int = INITIAL_LIMIT, initial_offset: int
     - display the prime spiral,
     - run a simple "animation" with changing offsets.
     """
-
+    initial_limit:int = INITIAL_LIMIT
+    initial_offset:int=INITIAL_OFFSET
+    initial_animate:int=INITIAL_ANIMATE
+    initial_gap_tolerance:int=INITIAL_GAP_TOLERANCE
+    initial_min_run:int=INITIAL_MIN_RUN
+    
     # Shared state for callbacks
     matrix: np.ndarray | None = None  # will be created on demand
 
