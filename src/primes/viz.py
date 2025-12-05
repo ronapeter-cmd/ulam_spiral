@@ -280,7 +280,7 @@ def build_ulam_spiral_ui () -> None:
                 min_run = min_run_text.value
                 # matrix = display_primes(matrix,offset_text.value, output)
                 mask = detect_diagonal_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
-                show_with_diagonals(matrix, mask, output, 60)
+                show_with_diagonals(matrix, mask, output=output, 60)
             except ValueError:
                 print("Error " )
         else:
