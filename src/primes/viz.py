@@ -273,7 +273,7 @@ def build_ulam_spiral_ui () -> None:
   
     def on_diagonals_clicked(_toggle: widgets.ToggleButton, change) -> None:
         nonlocal matrix
-        if change["new"] = True:
+        if change["new"] == True:
             try:
                 limit = limit_text.value
                 gap_tolerance = gap_tolerance_text.value
