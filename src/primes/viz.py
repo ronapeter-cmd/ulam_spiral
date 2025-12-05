@@ -271,7 +271,7 @@ def build_ulam_spiral_ui () -> None:
         except ValueError:
             print("Error " )
   
-    def on_diagonals_clicked(_toggle: widgets.ToggleButton, change) -> None:
+    def on_diagonals_clicked(change) -> None:
         nonlocal matrix
         if change["new"] is True:
             try:
