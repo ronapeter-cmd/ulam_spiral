@@ -59,7 +59,7 @@ def find_runs_1d(array: np.ndarray, gap_tolerance: int = 1):
 # ============================================================
 
 def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
-  """
+    """
     Detect visually coherent diagonal line segments in an Ulam matrix.
     Both main diagonals (↘) and anti-diagonals (↙) are scanned.
 
@@ -78,65 +78,63 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
         2D binary mask (same shape as matrix).
         mask[i,j] = 1 indicates a detected diagonal segment pixel.
     """
-
-  rows, cols = matrix.shape
-  mask = np.zeros_like(matrix, dtype=bool)
-  # -----------------------------
-  # Scan main-diagonal direction ↘
-  # (diagonals defined by i - j = constant)
-  # -----------------------------
-  for k in range (-rows +1, cols):
-    diag = np.diag(matrix, k=k)
-    runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
-
-    for start, end in runs:
-        if end - start < min_run:
-            continue
-        # Map diag indexes back to matrix coordinates
-        for idx in range (start, end):
-            if k >= 0:
-                i = idx
-                j = idx + k
-            else:  # k < 0
-                i = idx - k
-                j = idx
-            if 0 <= i < rows and 0 <= j < cols:
-                mask[i,j] = 1
-
-  # -----------------------------
-  # Scan anti-diagonal direction ↙
-  # Use horizontal flip to reuse diagonal logic
-  # -----------------------------
-  flipped_matrix = np.fliplr(matrix)
-  flipped_mask = np.zeros_like(matrix, dtype=bool)
-
-  for k in range (-rows +1, cols):
-      diag = np.diag(flipped_matrix, k=k)
-      runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
-      
-      for start, end in runs:
-          if end - start < min_run:
-              continue
+    rows, cols = matrix.shape
+    mask = np.zeros_like(matrix, dtype=bool)
+    # -----------------------------
+    # Scan main-diagonal direction ↘
+    # (diagonals defined by i - j = constant)
+    # -----------------------------
+    for k in range (-rows +1, cols):
+        diag = np.diag(matrix, k=k)
+        runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
+        for start, end in runs:
+            if end - start < min_run:
+                continue
             # Map diag indexes back to matrix coordinates
-          for idx in range (start, end):
-              if k >= 0:
-                i = idx
-                j = idx + k
-              else:  # k < 0
-                i = idx - k
-                j = idx
-              if 0 <= i < rows and 0 <= j < cols:
-                  flipped_mask[i,j] = 1
-  # Flip back and combine both direction masks
-  mask |= np.fliplr(flipped_mask)
+            for idx in range (start, end):
+                if k >= 0:
+                    i = idx
+                    j = idx + k
+                else:  # k < 0
+                    i = idx - k
+                    j = idx
+                if 0 <= i < rows and 0 <= j < cols:
+                    mask[i,j] = 1
+                    
+    # -----------------------------
+    # Scan anti-diagonal direction ↙
+    # Use horizontal flip to reuse diagonal logic
+    # -----------------------------
+    
+    flipped_matrix = np.fliplr(matrix)
+    flipped_mask = np.zeros_like(matrix, dtype=bool)
 
-  return mask
+    for k in range (-rows +1, cols):
+        diag = np.diag(flipped_matrix, k=k)
+        runs = find_runs_1d(diag, gap_tolerance = gap_tolerance)
+        for start, end in runs:
+            if end - start < min_run:
+                continue
+            # Map diag indexes back to matrix coordinates
+            for idx in range (start, end):
+                if k >= 0:
+                    i = idx
+                    j = idx + k
+                else:  # k < 0
+                    i = idx - k
+                    j = idx
+                if 0 <= i < rows and 0 <= j < cols:
+                    flipped_mask[i,j] = 1
+    # Flip back and combine both direction masks
+    mask |= np.fliplr(flipped_mask)
+    return mask
 
 # ============================================================
 # 2. Diagonal segment detector (↘ and ↙ directions)
 # ============================================================
 
 def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
+    
     
   """
     Detect visually coherent horizontal and vertical line segments in an Ulam matrix.
@@ -157,50 +155,50 @@ def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1
         mask[i,j] = 1 indicates a detected segment pixel.
     """
 
-  rows, cols = matrix.shape
-  mask = np.zeros_like(matrix, dtype=bool)
-  # -----------------------------
-  # Scan horizontal direction ->
-  # -----------------------------
-  for k in range (0, rows):
-      row = matrix[k,:]
-      runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
-      for start, end in runs:
-          if end - start < min_run:
-              continue
+    rows, cols = matrix.shape
+    mask = np.zeros_like(matrix, dtype=bool)
+    # -----------------------------
+    # Scan horizontal direction ->
+    # -----------------------------
+    for k in range (0, rows):
+        row = matrix[k,:]
+        runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
+        for start, end in runs:
+            if end - start < min_run:
+                continue
             # Map row indexes back to matrix coordinates
-          for idx in range (start, end):
-              i = k
-              j = idx
-              if 0 <= i < rows and 0 <= j < cols:
-                  mask[i,j] = 1
+            for idx in range (start, end):
+                i = k
+                j = idx
+                if 0 <= i < rows and 0 <= j < cols:
+                    mask[i,j] = 1
 
-  # -----------------------------
-  # Scan vertical direction ->
-  # -----------------------------
-  vertical_mask = np.zeros_like(matrix, dtype=bool)
-  for k in range (0, cols):
-      col = matrix[:,k]
-      runs = find_runs_1d(col, gap_tolerance = gap_tolerance)
-      for start, end in runs:
-          if end - start < min_run:
-              continue
+    # -----------------------------
+    # Scan vertical direction ->
+    # -----------------------------
+    vertical_mask = np.zeros_like(matrix, dtype=bool)
+    for k in range (0, cols):
+        col = matrix[:,k]
+        runs = find_runs_1d(col, gap_tolerance = gap_tolerance)
+        for start, end in runs:
+            if end - start < min_run:
+                continue
             # Map col indexes back to matrix coordinates
-          for idx in range (start, end):
-              i = idx
-              j = k
-              if 0 <= i < rows and 0 <= j < cols:
-                  vertical_mask[i,j] = 1
-  mask |= vertical_mask
-    
-  return mask
+            for idx in range (start, end):
+                i = idx
+                j = k
+                if 0 <= i < rows and 0 <= j < cols:
+                    vertical_mask[i,j] = 1
+    mask |= vertical_mask
+    return mask
 
 
 # ============================================================
 # 3. Goodness score: how "diagonal" is the Ulam matrix?
 # ============================================================
 
-def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> float:  
+def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> float:
+    
     """
     Compute a normalized "goodness score" for an Ulam spiral matrix.
 
