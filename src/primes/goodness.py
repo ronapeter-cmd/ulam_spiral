@@ -156,8 +156,8 @@ def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1
         mask[i,j] = 1 indicates a detected segment pixel.
     """
 
-  rows, cols = matrix.shape
-  mask = np.zeros_like(matrix, dtype=bool)
+    rows, cols = matrix.shape
+    mask = np.zeros_like(matrix, dtype=bool)
   # -----------------------------
   # Scan horizontal direction ->
   # -----------------------------
