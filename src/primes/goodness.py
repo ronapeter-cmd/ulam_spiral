@@ -137,6 +137,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
 # ============================================================
 
 def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
+    
   """
     Detect visually coherent horizontal and vertical line segments in an Ulam matrix.
 
@@ -156,40 +157,41 @@ def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1
         mask[i,j] = 1 indicates a detected segment pixel.
     """
 
-    rows, cols = matrix.shape
-    mask = np.zeros_like(matrix, dtype=bool)
+  rows, cols = matrix.shape
+  mask = np.zeros_like(matrix, dtype=bool)
   # -----------------------------
   # Scan horizontal direction ->
   # -----------------------------
-    for k in range (0, rows):
-        row = matrix[k,:]
-        runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
-    for start, end in runs:
-        if end - start < min_run:
-            continue
-    # Map row indexes back to matrix coordinates
-        for idx in range (start, end):
-            i = k
-            j = idx
-            if 0 <= i < rows and 0 <= j < cols:
-                mask[i,j] = 1
+  for k in range (0, rows):
+      row = matrix[k,:]
+      runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
+      for start, end in runs:
+          if end - start < min_run:
+              continue
+            # Map row indexes back to matrix coordinates
+          for idx in range (start, end):
+              i = k
+              j = idx
+              if 0 <= i < rows and 0 <= j < cols:
+                  mask[i,j] = 1
 
   # -----------------------------
   # Scan horizontal direction ->
   # -----------------------------
-    for k in range (0, cols):
-        row = matrix[:,k]
-        runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
-    for start, end in runs:
-        if end - start < min_run:
-            continue
-    # Map row indexes back to matrix coordinates
-        for idx in range (start, end):
-            i = idx
-            j = k
-            if 0 <= i < rows and 0 <= j < cols:
-                vertical_mask[i,j] = 1
-    mask |= vertical_mask
+  vertical_mask = np.zeros_like(matrix, dtype=bool)
+  for k in range (0, cols):
+      row = matrix[:,k]
+      runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
+      for start, end in runs:
+          if end - start < min_run:
+              continue
+            # Map row indexes back to matrix coordinates
+          for idx in range (start, end):
+              i = idx
+              j = k
+              if 0 <= i < rows and 0 <= j < cols:
+                  vertical_mask[i,j] = 1
+                  mask |= vertical_mask
     
     return mask
 
