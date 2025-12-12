@@ -5,7 +5,7 @@ from ipywidgets import Output
 import numpy as np
 import matplotlib.pyplot as plt
 from .ulam_spiral import fill_primes
-from .goodness import detect_diagonal_segments, ulam_goodness
+from .goodness import detect_diagonal_segments, detect_horizontal_vertical_segments, ulam_goodness
 
 
 def display_primes(matrix: np.ndarray, output: Output | None = None, ) -> np.ndarray:
