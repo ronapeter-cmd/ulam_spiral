@@ -130,7 +130,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
     return mask
 
 # ============================================================
-# 2. Diagonal segment detector (↘ and ↙ directions)
+# 2. Horizontal and vertical segment detector (-> and ↓ directions)
 # ============================================================
 
 def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
@@ -202,6 +202,7 @@ def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> f
 
     The idea:
     - detect diagonal line segments (with tolerance for small gaps)
+    - detect horizontal and vertical line segments (with tolerance for small gaps)
     - compute the fraction of the matrix covered by these segments
 
     Parameters
@@ -219,7 +220,7 @@ def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> f
         Normalized score in approximately the range [0, 1].
         Higher values indicate stronger structure.
     """
-    mask = detect_diagonal_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
+    # mask = detect_diagonal_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
     mask |= detect_horizontal_vertical_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
     total_marked = mask.sum()
     size = matrix.shape[0]
