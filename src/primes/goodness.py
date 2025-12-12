@@ -193,7 +193,7 @@ def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1
                   vertical_mask[i,j] = 1
                   mask |= vertical_mask
     
-    return mask
+  return mask
 
 
 # ============================================================
