@@ -135,8 +135,7 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
 
 def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
     
-    
-  """
+    """
     Detect visually coherent horizontal and vertical line segments in an Ulam matrix.
 
     Parameters
@@ -154,7 +153,6 @@ def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1
         2D binary mask (same shape as matrix).
         mask[i,j] = 1 indicates a detected segment pixel.
     """
-
     rows, cols = matrix.shape
     mask = np.zeros_like(matrix, dtype=bool)
     # -----------------------------
