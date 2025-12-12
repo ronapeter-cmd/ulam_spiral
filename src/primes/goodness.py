@@ -133,6 +133,68 @@ def detect_diagonal_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:i
   return mask
 
 # ============================================================
+# 2. Diagonal segment detector (↘ and ↙ directions)
+# ============================================================
+
+def detect_horizontal_vertical_segments (matrix: np.ndarray, gap_tolerance:int=1, min_run:int=5) -> np.ndarray:
+  """
+    Detect visually coherent horizontal and vertical line segments in an Ulam matrix.
+
+    Parameters
+    ----------
+    matrix : np.ndarray
+        2D array containing 0 = non-prime, 1 = prime
+    gap_tolerance : int
+        Number of zeros allowed inside a "continuous" run.
+    min_run : int
+        Minimum run length to consider a segment meaningful.
+
+    Returns
+    -------
+    mask : np.ndarray
+        2D binary mask (same shape as matrix).
+        mask[i,j] = 1 indicates a detected segment pixel.
+    """
+
+  rows, cols = matrix.shape
+  mask = np.zeros_like(matrix, dtype=bool)
+  # -----------------------------
+  # Scan horizontal direction ->
+  # -----------------------------
+    for k in range (0, rows):
+        row = matrix[k,:]
+        runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
+    for start, end in runs:
+        if end - start < min_run:
+            continue
+    # Map row indexes back to matrix coordinates
+        for idx in range (start, end):
+            i = k
+            j = idx
+            if 0 <= i < rows and 0 <= j < cols:
+                mask[i,j] = 1
+
+  # -----------------------------
+  # Scan horizontal direction ->
+  # -----------------------------
+    for k in range (0, cols):
+        row = matrix[:,k]
+        runs = find_runs_1d(row, gap_tolerance = gap_tolerance)
+    for start, end in runs:
+        if end - start < min_run:
+            continue
+    # Map row indexes back to matrix coordinates
+        for idx in range (start, end):
+            i = idx
+            j = k
+            if 0 <= i < rows and 0 <= j < cols:
+                vertical_mask[i,j] = 1
+    mask |= vertical_mask
+    
+    return mask
+
+
+# ============================================================
 # 3. Goodness score: how "diagonal" is the Ulam matrix?
 # ============================================================
 
@@ -159,14 +221,15 @@ def ulam_goodness (matrix: np.ndarray, gap_tolerance:int=1, min_run: int=5) -> f
         Normalized score in approximately the range [0, 1].
         Higher values indicate stronger diagonal structure.
     """
-  mask = detect_diagonal_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
-  total_marked = mask.sum()
-  size = matrix.shape[0]
+    mask = detect_diagonal_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
+    mask |= detect_horizontal_vertical_segments (matrix, gap_tolerance=gap_tolerance, min_run=min_run)
+    total_marked = mask.sum()
+    size = matrix.shape[0]
 
-  # Normalize by total pixel count
-  score = total_marked / (size*size)
-
-  return float(score)
+    # Normalize by total pixel count
+    score = total_marked / (size*size)
+    
+    return float(score)
 
 
 
