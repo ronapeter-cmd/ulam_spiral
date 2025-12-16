@@ -66,7 +66,7 @@ def display_primes(matrix: np.ndarray, output: Output | None = None, ) -> np.nda
 
     return matrix
 
-def show_with_lines(matrix: np.ndarray, segment_mask:np.ndarray, output: Output | None = None, figsize_scale:float=60.0 ) -> None:
+def show_with_segments(matrix: np.ndarray, segment_mask:np.ndarray, output: Output | None = None, figsize_scale:float=60.0 ) -> None:
     """
     Display an Ulam spiral with diagonal, horizontal, vertical segments highlighted.
 
