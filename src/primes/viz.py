@@ -66,9 +66,9 @@ def display_primes(matrix: np.ndarray, output: Output | None = None, ) -> np.nda
 
     return matrix
 
-def show_with_diagonals(matrix: np.ndarray, diagonal_mask:np.ndarray, output: Output | None = None, figsize_scale:float=60.0 ) -> None:
+def show_with_lines(matrix: np.ndarray, segment_mask:np.ndarray, output: Output | None = None, figsize_scale:float=60.0 ) -> None:
     """
-    Display an Ulam spiral with diagonal segments highlighted.
+    Display an Ulam spiral with diagonal, horizontal, vertical segments highlighted.
 
     Parameters
     ----------
@@ -77,18 +77,18 @@ def show_with_diagonals(matrix: np.ndarray, diagonal_mask:np.ndarray, output: Ou
         Values:
             0 = non-prime
             1 = prime
-    diagonal_mask : np.ndarray
-        Same shape as matrix. 1s mark detected diagonal segments.
+    segment_mask : np.ndarray
+        Same shape as matrix. 1s mark detected segments.
     figsize_scale : float
         Controls figure size. Larger values = bigger plot.
 
     Notes
     -----
     - Blue points = primes
-    - Red points  = diagonal segments detected by detect_diagonal_segments()
+    - Red points  = segments detected by detect_diagonal_segments() and detect_horizontal_vertical_segments()
     """
     prime_y, prime_x = np.where(matrix == 1)
-    diag_y, diag_x = np.where(diagonal_mask == 1)
+    diag_y, diag_x = np.where(segment_mask == 1)
     size = matrix.shape[0]
 
     
@@ -103,8 +103,8 @@ def show_with_diagonals(matrix: np.ndarray, diagonal_mask:np.ndarray, output: Ou
         # Prime points in blue
         plt.scatter(prime_x, prime_y, c="blue", s=1, label="primes")
 
-        # Diagonal points in red
-        plt.scatter(diag_x, diag_y, c="red", s=1, label="diagonals")
+        # Points in segments in red
+        plt.scatter(diag_x, diag_y, c="red", s=1, label="segments")
 
         plt.xlim(0, size)
         plt.ylim(0, size)
@@ -228,9 +228,9 @@ def build_ulam_spiral_ui () -> None:
         tooltip="Display spiral with varying offsets",
     )
     
-    toggle_diagonals = widgets.ToggleButton(
+    toggle_segments = widgets.ToggleButton(
         value = False,
-        description="Display diagonals",
+        description="Display segments",
         button_style="info", 
     )
 
@@ -271,7 +271,7 @@ def build_ulam_spiral_ui () -> None:
         except ValueError:
             print("Error " )
   
-    def on_diagonals_clicked(change) -> None:
+    def on_segments_clicked(change) -> None:
         nonlocal matrix
         if change["new"] is True:
             try:
@@ -281,7 +281,7 @@ def build_ulam_spiral_ui () -> None:
                 # matrix = display_primes(matrix,offset_text.value, output)
                 mask = detect_diagonal_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
                 mask |= detect_horizontal_vertical_segments(matrix,gap_tolerance = gap_tolerance, min_run = min_run)
-                show_with_diagonals(matrix, mask, output=output, figsize_scale=60)
+                show_with_segments(matrix, mask, output=output, figsize_scale=60)
             except ValueError:
                 print("Error " )
         else:
@@ -293,13 +293,13 @@ def build_ulam_spiral_ui () -> None:
     # Bind the function to the button's click event
     button_display.on_click(on_display_clicked)
     button_animate.on_click(on_animate_clicked)
-    toggle_diagonals.observe(on_diagonals_clicked, names="value")
+    toggle_segments.observe(on_segments_clicked, names="value")
     
 
 
     # --- Show UI ---
     row1 = widgets.HBox([limit_text, offset_text, button_display])
-    row2 = widgets.HBox([gap_tolerance_text, min_run_text, toggle_diagonals])
+    row2 = widgets.HBox([gap_tolerance_text, min_run_text, toggle_segments])
     row3 = widgets.HBox([animate_text, button_animate])
     display(widgets.VBox([row1, row2, row3, output]))
 
