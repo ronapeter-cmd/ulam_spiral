@@ -19,6 +19,7 @@ Notebook examples for experimentation
 (Experimental) ideas for 3D extensions of Ulam’s concept
 
 🚀 Features
+
 🌀 Ulam Spiral Construction
 
 Generate large 2D Ulam spirals with an adjustable starting offset.
@@ -41,7 +42,7 @@ with configurable gap tolerance and minimum run length.
 
 A scalar score describing “how line-like” an Ulam matrix is.
 
-Higher values indicate stronger global diagonal structure.
+Higher values indicate stronger global diagonal and horizontal and vertical structure.
 
 🎛 Interactive UI (Jupyter)
 
@@ -173,7 +174,7 @@ Gap tolerance controls how “broken” diagonal patterns are interpreted
 
 🛠 Future Work
 
-Add 3D visualization (plot Ulam shells on a 3D lattice)
+Add 3D visualization (plot Ulam shells on a 3D lattice, 3D Sacks spiral)
 
 GPU-accelerated prime filling for very large grids
 
