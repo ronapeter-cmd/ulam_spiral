@@ -1,4 +1,4 @@
-📐 Ulam Spiral Explorer
+** Ulam Spiral Explorer **
 
 Prime visualization, diagonal pattern detection, goodness scoring, and interactive exploration tools
 
