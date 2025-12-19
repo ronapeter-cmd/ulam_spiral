@@ -1,74 +1,41 @@
-** Ulam Spiral Explorer **
+# 🌀 Ulam Spiral Explorer
 
-Prime visualization, diagonal pattern detection, goodness scoring, and interactive exploration tools
+**Visualizing Prime Numbers with Ulam Spirals**
 
-This project implements an extensible and modular framework for studying the visual structure of prime numbers using the Ulam spiral and related techniques.
+This project implements tools for generating and exploring the **Ulam spiral** — a classic prime number visualization — along with methods for detecting structured line segments and computing a *goodness* score that quantifies how visually coherent prime patterns are.
 
-It includes:
+---
 
-Efficient prime–spiral generation
+## 📌 Features
 
-Diagonal, horizontal, and vertical structure detection
+- 🧮 **Ulam Spiral Construction**
+  - Fill a square grid with primes arranged in a spiral.
+  - Start at different offsets to explore how pattern structure changes.
 
-A “goodness” metric that quantifies the visual coherence of prime lines
+- 🔎 **Line Segment Detection**
+  - Detect and highlight:
+    - Main diagonals (↘)
+    - Anti-diagonals (↙)
+    - Horizontal (→)
+    - Vertical (↓)
+  - Configurable gap tolerance and minimum run length.
 
-An interactive Jupyter UI for exploring offsets, parameters, and patterns
+- 📊 **Goodness Metric**
+  - Quantifies how “line-like” the prime distribution appears in the spiral.
+  - Scores are normalized and comparable across runs.
 
-Notebook examples for experimentation
+- 🧰 **Interactive Jupyter UI**
+  - Widget UI to explore limit, offset, animation, and detection parameters.
+  - Real-time plots and updates within notebooks.
 
-(Experimental) ideas for 3D extensions of Ulam’s concept
+- 📓 **Notebooks Included**
+  - Example notebooks demonstrate visualization and analysis.
 
-🚀 Features
+---
 
-🌀 Ulam Spiral Construction
+## 📁 Repository Structure
 
-Generate large 2D Ulam spirals with an adjustable starting offset.
-
-🔍 Line Structure Detection
-
-Detect visually coherent:
-
-Main diagonal segments (↘)
-
-Anti-diagonal segments (↙)
-
-Horizontal segments (→)
-
-Vertical segments (↓)
-
-with configurable gap tolerance and minimum run length.
-
-📊 Goodness Metric
-
-A scalar score describing “how line-like” an Ulam matrix is.
-
-Higher values indicate stronger global diagonal and horizontal and vertical structure.
-
-🎛 Interactive UI (Jupyter)
-
-Explore Ulam spirals with widgets:
-
-Select prime limit
-
-Adjust offset
-
-Show/hide diagonal detection
-
-Run animations (varying offsets)
-
-Tune gap tolerance & minimum run parameters
-
-📓 Example Notebooks
-
-Includes a step-by-step exploration notebook showing:
-
-How primes arrange into diagonal patterns
-
-How the goodness score varies with offset
-
-How detection parameters affect the segmentation
-
-📦 Project Structure
+```text
 primes/
 ├── README.md
 ├── pyproject.toml
@@ -77,117 +44,107 @@ primes/
 └── src/
     └── primes/
         ├── __init__.py
-        ├── primes.py              # prime utilities (is_prime etc.)
-        ├── ulam_spiral.py         # fill_primes + Ulam matrix construction
-        ├── goodness.py            # diagonal + HV detection + goodness metric
-        └── viz.py                 # plotting + interactive UI
+        ├── primes.py              # prime utilities
+        ├── ulam_spiral.py         # spiral generation logic
+        ├── goodness.py            # run detection & goodness score
+        └── viz.py                 # plotting & interactive widgets
+🚀 Installation
+Prerequisites
 
-🔧 Installation
+Python 3.9+
 
-This project uses numpy, matplotlib, and ipywidgets.
+numpy
 
-Clone and install in development mode:
+matplotlib
 
-git clone https://github.com/<your-username>/primes.git
+ipywidgets
+
+jupyter notebook or lab
+
+Install via pip:
+
+git clone https://github.com/ronapeter-cmd/primes.git
 cd primes
 pip install -e .
 
-
-Launch Jupyter:
+Launch a notebook:
 
 jupyter notebook
+📌 Quick Start Examples
+🔹 Display an Ulam Spiral
 
-🧠 Quick Start
-1. Generate and display an Ulam spiral
 import numpy as np
 from primes.ulam_spiral import fill_primes
 from primes.viz import display_primes
 
-limit = 100000
+limit = 100_000
 size = int(limit**0.5) + 10
 matrix = np.zeros((size, size), dtype=int)
 
 matrix = fill_primes(matrix, offset=1)
 display_primes(matrix)
-
-2. Detect and visualize diagonal segments
+🔹 Detect and Show Diagonals
 from primes.goodness import detect_diagonal_segments
 from primes.viz import show_with_diagonals
 
 mask = detect_diagonal_segments(matrix, gap_tolerance=2, min_run=20)
 show_with_diagonals(matrix, mask)
+Blue = primes
+Red = detected line segments
 
+🔹 Compute Goodness Score
 
-Blue → all primes
-Red → detected line segments
-
-3. Compute the global “goodness” score
 from primes.goodness import ulam_goodness
 
 score = ulam_goodness(matrix, gap_tolerance=2, min_run=20)
-print("Goodness:", score)
+print(f"Goodness score: {score:.4f}")
 
-4. Explore with the interactive UI
+🔹 Interactive UI
+In a notebook cell:
+
 from primes.viz import build_ulam_spiral_ui
 build_ulam_spiral_ui()
 
+🔬 About the Goodness Metric
+The goodness score measures the fraction of the grid that is covered by run segments (diagonals and HV) that satisfy configured tolerances.
+It gives an intuitive sense of how “structured” the prime layout appears visually.
 
-This opens:
+📈 Tips for Exploration
+Vary the offset — explore how the spiral structure changes
 
-Limit selector
-
-Offset selector
-
-Toggle: show diagonals
-
-Animation over offsets
-
-Tuning of gap tolerance & min run
-
-Live updates inside the notebook
-
-5. Scan offsets and find the best one
-scores = []
-offsets = range(0, 1000)
-
-for off in offsets:
-    m = fill_primes(np.zeros((size,size), int), offset=off)
-    s = ulam_goodness(m, gap_tolerance=2, min_run=20)
-    scores.append(s)
-
-best_offset = offsets[np.argmax(scores)]
-print("Best offset:", best_offset)
-
-🧪 Research Notes
-
-Ulam spirals exhibit surprisingly strong diagonal structure.
-This project provides tools to quantify and visualize these effects:
-
-Prime distributions create polynomial-diagonals
-
-The goodness metric correlates with “visual order”
-
-Offsets significantly change the structure
-
-Gap tolerance controls how “broken” diagonal patterns are interpreted
+Tune gap_tolerance and min_run for different behaviors
 
 
-🛠 Future Work
+🧪 Example Notebook
+See notebooks/Visualize primes.ipynb for a step-by-step exploration including:
 
-Add 3D visualization (plot Ulam shells on a 3D lattice, 3D Sacks spiral)
+Pattern visualization
 
-GPU-accelerated prime filling for very large grids
+Goodness score plots
 
-Better statistical evaluation of goodness scores
+Offset sweeps - finetune it with the jumps parameter
 
-Radon-transform-based line detection
+🛠 Contributing
+Contributions are welcome! Consider adding:
 
-Heatmaps for local diagonal density
+Unit tests
+
+Additional UI controls
+
+Alternative detection metrics (e.g., Radon transform or autocorrelation)
+
+Performance improvements
+
+To contribute:
+
+Fork the repository
+
+Create a feature branch
+
+Open a pull request
 
 📄 License
-
-MIT License — free to use and modify.
+This project is licensed under the MIT License — free to use and modify.
 
 🙏 Acknowledgements
-
-Inspired by Stanislaw Ulam’s original observation (1963), and by subsequent mathematical and computational studies on prime spatial structure
+Inspired by Stanislav Ulam’s classic prime spiral visualization and subsequent community explorations of prime structure.
